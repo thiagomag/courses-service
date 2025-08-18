@@ -25,6 +25,7 @@ public class Module extends BaseEntity<Long> {
     private String description;
     private Integer position;
     private Long courseId;
+    private Long instructorId;
     @Transient
     private List<Lesson> lessons;
 }

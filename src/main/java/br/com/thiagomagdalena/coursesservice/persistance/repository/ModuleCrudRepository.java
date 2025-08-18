@@ -12,10 +12,12 @@ public interface ModuleCrudRepository extends BaseReactiveCrudRepository<Module,
     @Query("SELECT m.* FROM module m " +
             "WHERE ('' = :title OR LOWER(m.title) LIKE LOWER('%'||:title||'%')) " +
             "AND (:courseId IS NULL OR m.course_id = :courseId) " +
+            "AND (:instructorId IS NULL OR m.instructor_id = :instructorId) " +
             "AND ('' = COALESCE(:ids, '') OR m.id::varchar IN (:ids)) " +
-            "AND c.deleted_tmsp IS NULL")
+            "AND m.deleted_tmsp IS NULL")
     Flux<Module> findByModuleRequestParams(@Param("title") String title,
                                            @Param("courseId") Long courseId,
+                                           @Param("instructorId") Long instructorId,
                                            @Param("ids") Set<String> ids);
 
     Flux<Module> findByCourseId(Long courseId);

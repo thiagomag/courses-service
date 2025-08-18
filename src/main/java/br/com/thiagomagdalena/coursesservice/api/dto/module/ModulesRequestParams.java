@@ -32,6 +32,7 @@ public class ModulesRequestParams {
     private String title;
     private Set<Long> ids;
     private Long courseId;
+    private Long instructorId;
 
     public Set<Long> getIds() {
         if (ids == null) {

@@ -46,10 +46,12 @@ public class ModuleController {
     @Operation(summary = "Listar Módulos", description = "Endpoint para listar todos os módulos")
     public Flux<ModuleResponse> fetchAll(@RequestParam(value = "id__in", required = false) String ids,
                                          @RequestParam(value = "title", required = false) String title,
-                                         @RequestParam(value = "course_id", required = false) Long courseId) {
+                                         @RequestParam(value = "course_id", required = false) Long courseId,
+                                         @RequestParam(value = "instructor_id", required = false) Long instructorId) {
         final var params = ModulesRequestParams.builder()
                 .title(title)
                 .courseId(courseId)
+                .instructorId(instructorId)
                 .build();
         params.addIds(ids);
         return getAllModulesUseCase.execute(params);

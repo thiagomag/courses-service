@@ -36,9 +36,10 @@ public class ModuleRepositoryImpl implements ModuleRepository {
     public Flux<Module> findByModulesRequestParam(ModulesRequestParams modulesRequestParam) {
         final var title = Optional.ofNullable(modulesRequestParam.getTitle()).orElse("");
         final var courseId = modulesRequestParam.getCourseId();
+        final var instructorId = modulesRequestParam.getInstructorId();
         final var ids = CollectionUtils.isEmpty(modulesRequestParam.getIds()) ? Collections.singleton("") : modulesRequestParam.getIdsAsString();
 
-        return moduleCrudRepository.findByModuleRequestParams(title, courseId, ids)
+        return moduleCrudRepository.findByModuleRequestParams(title, courseId, instructorId, ids)
                 .flatMap(this::fetchDependencies);
     }
 

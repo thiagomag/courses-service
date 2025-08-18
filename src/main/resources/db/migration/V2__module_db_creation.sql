@@ -4,6 +4,7 @@ CREATE TABLE modules (
     description     TEXT,
     position        INTEGER,
     course_id       BIGINT NOT NULL,
+    instructor_id   BIGINT NOT NULL,
     created_at      TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     created_by_id   BIGINT,
     updated_at      TIMESTAMP,

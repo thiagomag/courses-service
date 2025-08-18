@@ -31,6 +31,7 @@ public class ModuleResponse {
     private String description;
     private Integer position;
     private Long courseId;
+    private Long instructorId;
     private List<Lesson> lessons;
 
     public List<Lesson> getLessons() {

@@ -13,7 +13,7 @@ public interface LessonCrudRepository extends BaseReactiveCrudRepository<Lesson,
             "WHERE ('' = :title OR LOWER(l.title) LIKE LOWER('%'||:title||'%')) " +
             "AND (:moduleId IS NULL OR l.course_id = :moduleId) " +
             "AND ('' = COALESCE(:ids, '') OR l.id::varchar IN (:ids)) " +
-            "AND c.deleted_tmsp IS NULL")
+            "AND l.deleted_tmsp IS NULL")
     Flux<Lesson> findByLessonRequestParams(@Param("title") String title,
                                            @Param("moduleId") Long moduleId,
                                            @Param("ids") Set<String> ids);
