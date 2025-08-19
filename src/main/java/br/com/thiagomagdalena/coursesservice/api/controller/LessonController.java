@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -37,12 +38,14 @@ public class LessonController {
     private final DeleteLessonUseCase deleteLessonUseCase;
 
     @PostMapping
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @Operation(summary = "Criar Lição", description = "Endpoint para criar uma nova lição")
     public Mono<LessonResponse> createCourse(@Valid @RequestBody LessonRequest lessonRequest) {
         return createLessonUseCase.execute(lessonRequest);
     }
 
     @GetMapping
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_SUBSCRIBER')")
     @Operation(summary = "Listar Lições", description = "Endpoint para listar todos as lições")
     public Flux<LessonResponse> fetchAll(@RequestParam(value = "id__in", required = false) String ids,
                                          @RequestParam(value = "title", required = false) String title,
@@ -56,12 +59,14 @@ public class LessonController {
     }
 
     @GetMapping("/{lessonId}")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_SUBSCRIBER')")
     @Operation(summary = "Obter lição por ID", description = "Endpoint para obter uma lição pelo seu ID")
     public Mono<LessonResponse> fetchById(@PathVariable Long lessonId) {
         return getLessonUseCase.execute(lessonId);
     }
 
     @PatchMapping("/{lessonId}")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @Operation(summary = "Atualizar Lição", description = "Endpoint para atualizar uma lição existente")
     public Mono<LessonResponse> updateLesson(@PathVariable Long lessonId,
                                              @RequestBody LessonRequest lessonRequest) {
@@ -70,6 +75,7 @@ public class LessonController {
     }
 
     @DeleteMapping("/{lessonId}")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @Operation(summary = "Deletar Lição", description = "Endpoint para deletar uma lição existente")
     public Mono<Void> deleteLesson(@PathVariable Long lessonId) {
         return deleteLessonUseCase.execute(lessonId);

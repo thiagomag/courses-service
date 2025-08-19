@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -37,12 +38,14 @@ public class ModuleController {
     private final DeleteModuleUseCase deleteModuleUseCase;
 
     @PostMapping
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @Operation(summary = "Criar módulo", description = "Endpoint para criar um novo módulo")
     public Mono<ModuleResponse> createModule(@Valid @RequestBody ModuleRequest moduleRequest) {
         return createModuleUseCase.execute(moduleRequest);
     }
 
     @GetMapping
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_SUBSCRIBER')")
     @Operation(summary = "Listar Módulos", description = "Endpoint para listar todos os módulos")
     public Flux<ModuleResponse> fetchAll(@RequestParam(value = "id__in", required = false) String ids,
                                          @RequestParam(value = "title", required = false) String title,
@@ -58,12 +61,14 @@ public class ModuleController {
     }
 
     @GetMapping("/{moduleId}")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_SUBSCRIBER')")
     @Operation(summary = "Obter módulo por ID", description = "Endpoint para obter um módulo pelo seu ID")
     public Mono<ModuleResponse> fetchById(@PathVariable Long moduleId) {
         return getModuleUseCase.execute(moduleId);
     }
 
     @PatchMapping("/{moduleId}")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @Operation(summary = "Atualizar Módulo", description = "Endpoint para atualizar um módulo existente")
     public Mono<ModuleResponse> updateModule(@PathVariable Long moduleId,
                                              @RequestBody ModuleRequest moduleRequest) {
@@ -72,6 +77,7 @@ public class ModuleController {
     }
 
     @DeleteMapping("/{moduleId}")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @Operation(summary = "Deletar módulo", description = "Endpoint para deletar um módulo existente")
     public Mono<Void> deleteModule(@PathVariable Long moduleId) {
         return deleteModuleUseCase.execute(moduleId);

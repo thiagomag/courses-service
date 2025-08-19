@@ -14,6 +14,7 @@ import org.springframework.web.util.pattern.PathPattern;
 import org.springframework.web.util.pattern.PathPatternParser;
 import reactor.core.publisher.Mono;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -22,6 +23,7 @@ import java.util.stream.Stream;
 public class HeaderAuthenticationWebFilter implements WebFilter {
 
     private static final String ROLES_HEADER = "X-User-Roles";
+    private static final String SUBSCRIPTION_STATUS_HEADER = "X-Subscription-Status";
     private final List<PathPattern> publicPatterns;
     private final List<PathPattern> postPublicPatterns;
 
@@ -45,15 +47,20 @@ public class HeaderAuthenticationWebFilter implements WebFilter {
         }
 
         String rolesHeader = request.getHeaders().getFirst(ROLES_HEADER);
+        String subscriptionStatus = request.getHeaders().getFirst(SUBSCRIPTION_STATUS_HEADER);
         if (rolesHeader == null || rolesHeader.isEmpty()) {
             log.info("Header '{}' não encontrado para uma rota protegida: {}. Acesso será negado.", ROLES_HEADER, request.getURI());
             return chain.filter(exchange);
         }
 
-        List<SimpleGrantedAuthority> authorities = Stream.of(rolesHeader.split(","))
+        List<SimpleGrantedAuthority> authorities = new ArrayList<>(Stream.of(rolesHeader.split(","))
                 .map(String::trim)
                 .map(SimpleGrantedAuthority::new)
-                .toList();
+                .toList());
+
+        if ("ACTIVE".equalsIgnoreCase(subscriptionStatus)) {
+            authorities.add(new SimpleGrantedAuthority("ROLE_SUBSCRIBER"));
+        }
 
         var authentication = new UsernamePasswordAuthenticationToken(
                 "pre-authenticated-user", null, authorities);
