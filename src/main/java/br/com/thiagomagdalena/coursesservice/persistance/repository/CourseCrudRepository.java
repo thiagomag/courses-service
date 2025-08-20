@@ -9,7 +9,7 @@ import java.util.Set;
 
 public interface CourseCrudRepository extends BaseReactiveCrudRepository<Course, Long> {
 
-    @Query("SELECT c.* FROM course c " +
+    @Query("SELECT c.* FROM courses c " +
             "WHERE ('' = :name OR LOWER(c.name) LIKE LOWER('%'||:name||'%')) " +
             "AND ('' = :category OR LOWER(c.category) = LOWER(:category)) " +
             "AND ('' = COALESCE(:ids, '') OR c.id::varchar IN (:ids)) " +
