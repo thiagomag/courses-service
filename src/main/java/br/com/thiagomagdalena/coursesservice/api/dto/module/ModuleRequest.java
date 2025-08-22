@@ -33,6 +33,6 @@ public class ModuleRequest {
     private Integer position;
     @NotNull
     private Long courseId;
-    @NotNull
+//    @NotNull
     private Long instructorId;
 }

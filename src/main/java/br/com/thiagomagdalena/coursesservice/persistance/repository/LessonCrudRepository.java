@@ -9,9 +9,9 @@ import java.util.Set;
 
 public interface LessonCrudRepository extends BaseReactiveCrudRepository<Lesson, Long> {
 
-    @Query("SELECT l.* FROM lesson l " +
+    @Query("SELECT l.* FROM lessons l " +
             "WHERE ('' = :title OR LOWER(l.title) LIKE LOWER('%'||:title||'%')) " +
-            "AND (:moduleId IS NULL OR l.course_id = :moduleId) " +
+            "AND (:moduleId IS NULL OR l.module_id = :moduleId) " +
             "AND ('' = COALESCE(:ids, '') OR l.id::varchar IN (:ids)) " +
             "AND l.deleted_tmsp IS NULL")
     Flux<Lesson> findByLessonRequestParams(@Param("title") String title,

@@ -9,7 +9,7 @@ import java.util.Set;
 
 public interface ModuleCrudRepository extends BaseReactiveCrudRepository<Module, Long> {
 
-    @Query("SELECT m.* FROM module m " +
+    @Query("SELECT m.* FROM modules m " +
             "WHERE ('' = :title OR LOWER(m.title) LIKE LOWER('%'||:title||'%')) " +
             "AND (:courseId IS NULL OR m.course_id = :courseId) " +
             "AND (:instructorId IS NULL OR m.instructor_id = :instructorId) " +
